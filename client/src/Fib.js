@@ -2,21 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 const Fib = () => {
-  const [seenIndexes, setSeenIndexes] = setState([]);
-  const [values, setValues] = setState({});
-  const [index, setIndex] = setState("");
-
-  useEffect(() => {
-    fetchValues();
-    fetchIndexes();
-    return () => {
-      console.log("Clean-up");
-    };
-  }, []);
+  const [seenIndexes, setSeenIndexes] = useState([]);
+  const [values, setValues] = useState({});
+  const [index, setIndex] = useState("");
 
   const fetchValues = async () => {
-    const values = await axios.get("/api/values/current");
-    setSeenIndexes(values);
+    const fetchedValues = await axios.get("/api/values/current");
+    setValues(fetchedValues);
+    setSeenIndexes(fetchedValues);
   };
 
   const fetchIndexes = async () => {
@@ -24,7 +17,7 @@ const Fib = () => {
     setSeenIndexes(seenIndexes);
   };
 
-  handleSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     await axios.post("/api/values", {
@@ -33,6 +26,14 @@ const Fib = () => {
 
     setIndex("");
   };
+
+  useEffect(() => {
+    fetchValues();
+    fetchIndexes();
+    return () => {
+      console.log("Clean-up");
+    };
+  }, []);
 
   const renderSeenIndexes = () => {
     return seenIndexes.map(({ number }) => number).join(", ");
