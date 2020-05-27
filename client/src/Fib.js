@@ -8,22 +8,31 @@ const Fib = () => {
 
   const fetchValues = async () => {
     const fetchedValues = await axios.get("/api/values/current");
-    setValues(fetchedValues);
-    setSeenIndexes(fetchedValues);
+    console.log("fetchedValues");
+    console.log(fetchedValues);
+    setValues(fetchedValues.data);
   };
 
   const fetchIndexes = async () => {
-    const seenIndexes = await axios.get("/api/values/all");
-    setSeenIndexes(seenIndexes);
+    try {
+      const seenIndexes = await axios.get("/api/values/all");
+      setSeenIndexes(seenIndexes.data);
+      console.log("seenIndexes");
+      console.log(seenIndexes);
+    } catch (e) {
+      console.error(e.message);
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    await axios.post("/api/values", {
-      index: index,
-    });
-
+    try {
+      await axios.post("/api/values", {
+        index: index,
+      });
+    } catch (e) {
+      console.error(e.message);
+    }
     setIndex("");
   };
 
