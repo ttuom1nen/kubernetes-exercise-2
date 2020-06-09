@@ -4,20 +4,20 @@ services:
   - docker
 
 before_install:
-  - docker build -t ttuom1nen/docker-exercise-3 -f ./client/Dockerfile.dev ./client
+  - docker build -t ironwagen/docker-exercise-3 -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true ttuom1nen/docker-exercise-3 npm test -- --coverage
+  - docker run -e CI=true ironwagen/docker-exercise-3 npm test -- --coverage
 
 after_success:
-  - docker build -t ttuom1nen/client ./client
-  - docker build -t ttuom1nen/nginx ./nginx
-  - docker build -t ttuom1nen/server ./server
-  - docker build -t ttuom1nen/worker ./worker
+  - docker build -t ironwagen/multi-client ./client
+  - docker build -t ironwagen/multi-nginx ./nginx
+  - docker build -t ironwagen/multi-server ./server
+  - docker build -t ironwagen/multi-worker ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to Docker Hub
-  - docker push ttuom1nen/client
-  - docker push ttuom1nen/nginx
-  - docker push ttuom1nen/server
-  - docker push ttuom1nen/worker
+  - docker push ironwagen/multi-client
+  - docker push ironwagen/multi-nginx
+  - docker push ironwagen/multi-server
+  - docker push ironwagen/multi-worker
