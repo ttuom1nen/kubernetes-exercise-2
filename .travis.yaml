@@ -7,6 +7,12 @@ before_install:
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud components update kubectl
   - gcloud auth activate-service-account --key-file service-account.json
-  - gcloud config set project skilful-berm-214822
+  - gcloud config set project skilful-berm-214822 # <- Auto-generated id of project
   - gcloud config set compute/zone us-central1-a
-  - gcloud container clusters get-credentials multi-cluster
+  - gcloud container clusters get-credentials multi-cluster # <- Name of project in gcloud
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker build -t ironwagen/react-test -f ./client/Dockerfile.dev ./client
+
+# For running tests:
+script:
+  - docker run ironwagen/react-test npm test -- --coverage
