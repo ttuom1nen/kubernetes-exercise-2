@@ -1,0 +1,22 @@
+apiVersion: skaffold/v1beta2
+kind: Config
+build:
+  local:
+    push: false
+  artifacts:
+    - image: ironwagen/multi-client
+      context: client
+      docker:
+        dockerfile: Dockerfile.dev
+        # Mode 1: Rebuild image from scratch, update K8S
+        # Mode 2: Inject updated files into the Client pod, rely on react app auto-update
+        # Below is mode 2:
+        # If any other type of file is changed than specified below, skaffold does mode 1
+      sync:
+        "**/*.js": .
+        "**/*.css": .
+        "**/*.html": .
+deploy:
+  kubectl:
+    manifests:
+      - k8s/client-deployment.yaml
